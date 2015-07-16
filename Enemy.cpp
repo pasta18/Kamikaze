@@ -90,7 +90,7 @@ void Enemy::Move(){
 }
 
 void Enemy::Start(int second){
-	if (set && !go && second == this->second){
+	if (!saw && set && !go && second == this->second){
 		go = true;
 		saw = true;
 	}
@@ -113,6 +113,10 @@ void Enemy::Fire(Bullet *bullet){
 	if (!bullet->Exist()){
 		if(way == 1)bullet->Set(CX(), CY(), BulletSpeed, 0);
 	}
+}
+
+bool Enemy::Accept(){
+	return !set;
 }
 
 double Enemy::Rad(int num){

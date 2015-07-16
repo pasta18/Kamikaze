@@ -43,9 +43,11 @@ void Boss::Set(int second, int stage){
 	Reset();
 	fade = false;
 	set = true;
+	exist = false;
+	saw = false;
 	born = second;
 	clear = false;
-	x = widthMax - boss1.width * 5;
+	x = widthMax / 2 - boss1.width * 5 / 2;
 	y = -boss1.height * 5;
 	switch (stage){ // ƒ{ƒX‚Ìî•ñ‚ğİ’è
 	case 1:

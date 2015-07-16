@@ -25,8 +25,9 @@ private:
 	void Crash();
 	void Menu();
 	void Shoot();
-	bool end, win;
-	int flame, second, endFlame, stage, select;
+	void AddEnemy();
+	bool end, win, add;
+	int flame, second, endFlame, stage, select, num;
 	Player *player;
 	Enemy *enemy[20];
 	Explosion *exp[50];
@@ -34,7 +35,7 @@ private:
 	Boss *boss;
 	Status status = Start;
 	Font font;
-	Texture title, normalEne, core, menu;
+	Texture normalEne, core, menu;
 };
 
 #endif

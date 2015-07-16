@@ -17,6 +17,7 @@ public:
 	double Radius();
 	bool Core();
 	bool Exist();
+	bool Accept();
 	bool Crash(double x, double y);
 	bool Shoot();
 	void Fire(Bullet *bullet);

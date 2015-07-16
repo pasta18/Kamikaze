@@ -16,4 +16,7 @@ const double heightMax = 480 - 30;
 const double firstX = widthMax / 2;
 const double firstY = 400;
 
+// ƒ{ƒX‚ÌoŒ»ŠÔ
+const int createBoss = 40;
+
 #endif

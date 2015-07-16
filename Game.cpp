@@ -1,7 +1,6 @@
 #include"Game.h"
 
-Game::Game(){
-	title = Texture::Texture(L"Example/Windmill.png");
+Game::Game(){	
 	normalEne = Texture::Texture(L"Data/Texture/Enemy.png");
 	core = Texture::Texture(L"Data/Texture/core.png");
 	menu = Texture::Texture(L"Data/Texture/menu.png");
@@ -17,9 +16,8 @@ Game::Game(){
 	}
 	stage = 1;
 	select = 0;
-	//enemy[0]->Set(Window::Width() / 2, 0, 1, 0, normalEne, 0, false, 0);
-	//enemy[1]->Set(Window::Width() / 3, 0, 2, 0, core, 0, true, 0);
-	//boss->Set(2, stage);
+	num = 0;
+	add = true;	
 	flame = 0;
 	second = 0;
 	endFlame = 0;
@@ -55,6 +53,7 @@ void Game::Play(){
 
 		}
 	}
+	if (add) AddEnemy();
 	Time();
 	for (int i = 0; i < 50; i++){
 		if (bul[i]->Exist()) bul[i]->Draw();
@@ -267,11 +266,13 @@ void Game::Title(){
 	if (Input::KeySpace.clicked){
 		if (select == 0){
 			stage = 1;
-			boss->Set(2, stage);
+			boss->Set(createBoss, stage);
 			flame = 0;
 			player->Set();
 			second = 0;
 			endFlame = 0;
+			num = 0;
+			add = true;
 			end = false;
 			status = Playing;
 			for (int i = 0; i < 50; i++){
