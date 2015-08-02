@@ -3,6 +3,7 @@
 #include"Data.h"
 #include"Bullet.h"
 #include"Explosion.h"
+#include"Player.h"
 
 class Enemy{
 public:
@@ -20,8 +21,9 @@ public:
 	bool Accept();
 	bool Crash(double x, double y);
 	bool Shoot();
-	void Fire(Bullet *bullet);
+	bool Fire(Bullet *bullet, Player *player);
 	void death(Explosion *exp);
+	void Reset();
 private:
 	void Move();
 	void Start(int second);
@@ -29,9 +31,9 @@ private:
 	void ShootPatarn(int patarn);
 	double Rad(int num);
 	Texture ene;
-	double x, y, speed, rad;
+	double x, y, speed, rad, b_rad;
 	int second, shoot, flame, way, fire;
-	bool go, set, damage, saw;
+	bool go, set, damage, saw, dep;
 };
 
 #endif

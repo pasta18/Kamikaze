@@ -21,6 +21,7 @@ public:
 	void Win();
 	bool Over();
 	bool Clear();
+	void Reset();
 	void Set();
 	bool Crash(double x, double y, double radius);
 private:
@@ -29,6 +30,7 @@ private:
 	void Respawn();
 	void Barrier();
 	Texture play;
+	Sound sound;
 	double x, y, tough;
 	bool exist, saw, barrier, bomb, respawn, clear, over;
 	int flame, stock;

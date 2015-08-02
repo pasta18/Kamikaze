@@ -26,6 +26,7 @@ private:
 	double x, y, speed, rad;
 	int flame = 0;
 	bool exist, saw, flag;
+	Sound sound;
 };
 
 #endif

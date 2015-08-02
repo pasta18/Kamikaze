@@ -4,6 +4,9 @@ Boss::Boss(){
 	boss1 = Texture::Texture(L"Data/Texture/Boss1.png");
 	boss2 = Texture::Texture(L"Data/Texture/Boss2.png");
 	core = Texture::Texture(L"Data/Texture/Boss3.png");
+	enemy = Texture::Texture(L"Data/Texture/Enemy.png");
+	exp2 = Sound::Sound(L"Data/Audio/exp2.mp3");
+	exp3 = Sound::Sound(L"Data/Audio/exp3.mp3");
 	saw = false;
 	exist = false;
 	right = false;
@@ -14,6 +17,7 @@ Boss::Boss(){
 	set = false;
 	for (int i = 0; i < block; i++){
 		num[i] = 0;
+		bitFlag[i] = false;
 	}
 	bomb = 0;
 	clear = false;
@@ -47,6 +51,9 @@ void Boss::Set(int second, int stage){
 	saw = false;
 	born = second;
 	clear = false;
+	for (int i = 0; i < block; i++){
+		bitFlag[i] = false;
+	}
 	x = widthMax / 2 - boss1.width * 5 / 2;
 	y = -boss1.height * 5;
 	switch (stage){ // ƒ{ƒX‚Ìî•ñ‚ðÝ’è
@@ -66,6 +73,19 @@ void Boss::Set(int second, int stage){
 		num[20] = 4;	
 		num[24] = 3;
 		break;
+	case 2:
+		num[1] = 5;
+		num[2] = 6;
+		num[3] = 2;
+		num[6] = 4;
+		num[7] = 1;
+		num[8] = 3;
+		num[15] = 8;
+		num[16] = 8;
+		num[18] = 8;
+		num[19] = 8;
+		num[20] = 8;
+		num[24] = 8;
 	}
 	texSet();
 }
@@ -74,7 +94,11 @@ bool Boss::Win(){
 	return (!exist && saw);
 }
 
-bool Boss::Crash(double x, double y){
+bool Boss::bitCrash(int number){
+	return bitFlag[number];
+}
+
+bool Boss::Crash(double x, double y, Player *player){
 	for (int i = 0; i < block; i++){
 		if (num[i] == 0) continue;
 		if (num[i] == 1){
@@ -83,6 +107,13 @@ bool Boss::Crash(double x, double y){
 				exist = false;
 				flame = 0;
 				bomb = 10;
+			}
+		}
+		else if (num[i] == 8){
+			double distance = sqrt(pow(CX(i) - x, 2.0) + pow(CY(i) - y, 2.0));
+			if (distance < core.width / 2){
+				if (!player->Bomb()) return true;
+				bitFlag[i] = true;
 			}
 		}
 		else{
@@ -94,12 +125,20 @@ bool Boss::Crash(double x, double y){
 	return false;
 }
 
+void Boss::bitDeath(int number, Explosion *exp){
+	if (bitCrash((number))){
+		exp->Set(X(number), Y(number));
+		exp2.playMulti();
+	}
+}
+
 void Boss::Death(Explosion *exp){
 	if (!exist && saw && bomb > 0 && flame == 0){
 		if (bomb == 1){
 			for (int i = 0; i < block; i++){
 				if (num[i] == 1){
 					exp->Set(X(i), Y(i));
+					exp3.play();
 					fade = true;
 					Fflame = 255;
 					break;
@@ -112,6 +151,7 @@ void Boss::Death(Explosion *exp){
 			for (int i = 0; i < block; i++){
 				if (num[i] == 1){
 					exp->Set(X(i) + bx, Y(i) + by);
+					exp2.playMulti();
 					break;
 				}
 			}
@@ -168,6 +208,48 @@ bool Boss::Shoot(Bullet *bullet, int stage, Player *player){
 				bang--;
 			}
 			break;
+		case 2:
+			if (flame%60 == 0){
+				switch (bang){
+				case 0:
+					bang = 7;
+					break;
+				case 1:
+					if (num[16] != 8) break;
+					rad = atan((CX(16) - player->CX()) / abs(CY(16) - player->CY()));
+					bullet->Set(CX(16), CY(16), BulletSpeed / 3, rad);
+					break;
+				case 2:
+					if (num[18] != 8) break;
+					rad = atan((CX(18) - player->CX()) / abs(CY(18) - player->CY()));
+					bullet->Set(CX(18), CY(18), BulletSpeed / 3, rad);
+					break;
+				case 3:
+					if (num[20] != 8) break;
+					rad = atan((CX(20) - player->CX()) / abs(CY(20) - player->CY()));
+					bullet->Set(CX(20), CY(20), BulletSpeed / 3, rad);
+					break;
+				case 4:
+					if (num[24] != 8) break;
+					rad = atan((CX(24) - player->CX()) / abs(CY(24) - player->CY()));
+					bullet->Set(CX(24), CY(24), BulletSpeed / 3, rad);
+					break;
+				case 5:
+					if (num[15] != 8) break;
+					rad = atan((CX(15) - player->CX()) / abs(CY(15) - player->CY()));
+					bullet->Set(CX(15), CY(15), BulletSpeed / 3, rad);
+					break;
+				case 6:
+					if (num[19] != 8) break;
+					rad = atan((CX(19) - player->CX()) / abs(CY(19) - player->CY()));
+					bullet->Set(CX(19), CY(19), BulletSpeed / 3, rad);
+					break;
+				default:
+					break;
+				}
+				bang--;
+			}
+			break;
 		}
 		if (bang == 0) return false;
 	}
@@ -191,6 +273,9 @@ void Boss::texSet(){
 		else if (6 <= num[i] && num[i] <= 7){
 			boss[i] = boss1;
 		}
+		else if (num[i] == 8){
+			boss[i] = enemy;
+		}
 	}
 }
 
@@ -203,6 +288,10 @@ void Boss::start(int second){
 
 bool Boss::Exist(){
 	return exist;
+}
+
+int Boss::Block(){
+	return block;
 }
 
 void Boss::Move(){
@@ -251,6 +340,9 @@ void Boss::Fade(){
 			case 7:
 				boss[i].rotate(Radians(90.0)).draw(X(i), Y(i), Alpha(Fflame));
 				break;
+			case 8:
+				boss[i].draw(X(i), Y(i), Alpha(Fflame));
+				break;
 			}
 		}
 	}
@@ -269,6 +361,12 @@ void Boss::Draw(){
 	if (saw) {
 		if (!fade){
 			for (int i = 0; i < block; i++){
+
+				if (bitFlag[i]){
+					bitFlag[i] = false;
+					num[i] = 0;
+				}
+
 				switch (num[i]){
 				case 1:
 					boss[i].draw(X(i), Y(i));
@@ -290,6 +388,9 @@ void Boss::Draw(){
 					break;
 				case 7:
 					boss[i].rotate(Radians(90.0)).draw(X(i), Y(i));
+					break;
+				case 8:
+					boss[i].draw(X(i), Y(i));
 					break;
 				}
 			}

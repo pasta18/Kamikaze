@@ -4,14 +4,28 @@ Enemy::Enemy(){
 	shoot = 0;
 	flame = 0;
 	way = 0;
+	b_rad = 0;
 	fire = 0;
 	go = false;
 	set = false;
 	saw = false;
+	dep = false;
 }
 
 Enemy::~Enemy(){
 
+}
+
+void Enemy::Reset(){
+	shoot = 0;
+	flame = 0;
+	way = 0;
+	b_rad = 0;
+	fire = 0;
+	go = false;
+	set = false;
+	saw = false;
+	dep = false;
 }
 
 double Enemy::X(){
@@ -78,6 +92,26 @@ void Enemy::ShootPatarn(int patarn){
 	case 0:
 		shoot = 60;
 		way = 1;
+		dep = false;
+		b_rad = Rad(patarn);
+		break;
+	case 1:
+		shoot = 60;
+		way = 3;
+		dep = false;
+		b_rad = Rad(patarn);
+		break;
+	case 2:
+		shoot = 60;
+		way = 1;
+		dep = true;
+		b_rad = Rad(patarn);
+		break;
+	case 3:
+		shoot = 60;
+		way = 3;
+		dep = true;
+		b_rad = Rad(patarn);
 		break;
 	default:
 		break;
@@ -109,10 +143,22 @@ bool Enemy::Shoot(){
 	return flag;
 }
 
-void Enemy::Fire(Bullet *bullet){
+bool Enemy::Fire(Bullet *bullet, Player *player){
 	if (!bullet->Exist()){
-		if(way == 1)bullet->Set(CX(), CY(), BulletSpeed, 0);
+		if (dep){
+			double tmp = atan((CX() - player->CX()) / abs(CY() - player->CY()));
+
+			if (way == 1) bullet->Set(CX(), CY(), BulletSpeed, 0 + tmp);
+			if (way == 3) bullet->Set(CX(), CY(), BulletSpeed / 2, b_rad - (way - fire) * Radians(30) + tmp);
+		}
+		else{
+			if (way == 1) bullet->Set(CX(), CY(), BulletSpeed, 0);
+			if (way == 3) bullet->Set(CX(), CY(), BulletSpeed, b_rad - (way - fire) * Radians(30));
+		}
 	}
+	fire--;
+	if (fire <= 0) return false;
+	return true;
 }
 
 bool Enemy::Accept(){
@@ -120,9 +166,10 @@ bool Enemy::Accept(){
 }
 
 double Enemy::Rad(int num){
-	double b_rad = 0.0;
 
-	return b_rad;
+	if (num == 1 || num == 3) return Radians(30);
+
+	return 0.0;
 }
 
 void Enemy::End(){

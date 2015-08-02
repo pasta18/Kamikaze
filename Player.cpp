@@ -2,6 +2,7 @@
 
 Player::Player(){
 	play = Texture::Texture(L"Data/Texture/player.png");
+	sound = Sound::Sound(L"Data/Audio/var.mp3");
 	x = firstX;
 	y = firstY;
 	flame = 0;
@@ -39,6 +40,19 @@ double Player::CY(){
 
 bool Player::Exist(){
 	return exist;
+}
+
+void Player::Reset(){
+	exist = true;
+	saw = true;
+	bomb = true;
+	barrier = false;
+	over = false;
+	flame = 0;
+	tough = 0.0;
+	clear = false;
+	x = firstX;
+	y = firstY;
 }
 
 void Player::Set(){
@@ -199,6 +213,7 @@ void Player::Draw(){
 		else play.draw(x, y);
 	}
 	if (bomb && Input::KeyZ.pressed){
+		sound.play();
 		bomb = false;
 		barrier = true;
 		tough = (double)barrierRadius;

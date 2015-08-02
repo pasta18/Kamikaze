@@ -6,7 +6,7 @@
 
 // 各種速度
 const double Speed = 3.0;
-const double BulletSpeed = 5.0;
+const double BulletSpeed = 4.0;
 
 // ステージ縦横の最大値
 const double widthMax = 640 - 200;
@@ -18,5 +18,8 @@ const double firstY = 400;
 
 // ボスの出現時間
 const int createBoss = 40;
+
+// 最大ステージ数
+const int stageMax = 2;
 
 #endif

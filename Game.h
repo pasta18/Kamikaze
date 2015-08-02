@@ -5,10 +5,12 @@
 #include"Player.h"
 #include"Data.h"
 #include"Boss.h"
+#include"BackGround.h"
 
 enum Status{
 	Start,
 	Playing,
+	Pause,
 	Result,
 };
 
@@ -22,6 +24,7 @@ private:
 	void Play();
 	void End();
 	void Time();
+	void pause();
 	void Crash();
 	void Menu();
 	void Shoot();
@@ -33,9 +36,11 @@ private:
 	Explosion *exp[50];
 	Bullet *bul[50];
 	Boss *boss;
+	BackGround *backGround;
 	Status status = Start;
 	Font font;
 	Texture normalEne, core, menu;
+	Sound title, battle, exp2, button, cancel;
 };
 
 #endif

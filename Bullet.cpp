@@ -2,6 +2,7 @@
 
 Bullet::Bullet(){
 	bullet = Texture::Texture(L"Data/Texture/Bullet.png");
+	sound = Sound::Sound(L"Data/Audio/shot.mp3");
 	exist = false;
 	saw = false;
 	flag = false;
@@ -25,6 +26,7 @@ void Bullet::Set(double x, double y, double speed, double rad){
 	this->rad = rad;
 	flame = 0;
 	flag = false;
+	sound.play();
 }
 
 double Bullet::X(){
