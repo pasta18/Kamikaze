@@ -74,9 +74,11 @@ void Boss::Set(int second, int stage){
 		num[24] = 3;
 		break;
 	case 2:
+		num[0] = 8;
 		num[1] = 5;
 		num[2] = 6;
 		num[3] = 2;
+		num[4] = 8;
 		num[6] = 4;
 		num[7] = 1;
 		num[8] = 3;
@@ -212,7 +214,7 @@ bool Boss::Shoot(Bullet *bullet, int stage, Player *player){
 			if (flame%60 == 0){
 				switch (bang){
 				case 0:
-					bang = 7;
+					bang = 9;
 					break;
 				case 1:
 					if (num[16] != 8) break;
@@ -243,6 +245,16 @@ bool Boss::Shoot(Bullet *bullet, int stage, Player *player){
 					if (num[19] != 8) break;
 					rad = atan((CX(19) - player->CX()) / abs(CY(19) - player->CY()));
 					bullet->Set(CX(19), CY(19), BulletSpeed / 3, rad);
+					break;
+				case 7:
+					if (num[0] != 8) break;
+					rad = atan((CX(0) - player->CX()) / abs(CY(0) - player->CY()));
+					bullet->Set(CX(0), CY(0), BulletSpeed / 3, rad);
+					break;
+				case 8:
+					if (num[4] != 8) break;
+					rad = atan((CX(4) - player->CX()) / abs(CY(4) - player->CY()));
+					bullet->Set(CX(4), CY(4), BulletSpeed / 3, rad);
 					break;
 				default:
 					break;
